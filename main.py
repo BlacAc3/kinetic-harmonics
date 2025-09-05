@@ -1,11 +1,13 @@
 import os
 import pandas as pd
 from utils.visualizer import plot_data
-from hopf import HopfOscillator
+from hopf_oscillator import HopfOscillator  # Import the new HopfOscillator
 
 def main():
     # Paths
-    input_csv = "optimum_data_time_series.csv"  # Update this if your CSV file is named differently
+    # input_csv = "optimum_data_time_series.csv"  # Update this if your CSV file is named differently
+    # input_csv ="gait_processed.csv"
+    input_csv="gait_processed2.csv"
     output_dir = "images"
     before_image_path = os.path.join(output_dir, "before.png")
     after_image_path = os.path.join(output_dir, "after.png")
@@ -30,8 +32,9 @@ def main():
 
     # Step 3: Apply the Hopf Oscillator
     print("Applying Hopf Oscillator...")
-    hopf = HopfOscillator()
-    smoothed_data = hopf.smooth(numeric_data.to_numpy())
+    dt = 0.01  # Set the dt value
+    hopf = HopfOscillator(dt=dt)  # Instantiate the new HopfOscillator with dt
+    smoothed_data = hopf.run(numeric_data.to_numpy())  # Use the run method
 
     # Step 4: Visualize the raw data and smoothed data
     print("Generating before and after visualization...")
