@@ -61,7 +61,7 @@ def plot_data(before_data: pd.DataFrame, after_data, before_path: str, after_pat
         raise ValueError("after_data must be a DataFrame or NumPy array")
     if enforce_same_y_axis:
         plt.ylim(y_min, y_max)
-    plt.title("Smoothed Data (After Hopf Oscillator)")
+    plt.title("Data After Hopf Oscillator")
     plt.xlabel("Time Steps")
     plt.ylabel("Angle Values")
     plt.legend(loc='upper left', bbox_to_anchor=(1, 1), fontsize='small')
@@ -108,7 +108,7 @@ def _plot_side_by_side(before_data: pd.DataFrame, after_data, csv_name: str, max
             axes[1].set_ylim(after_data[:, col_idx].min(), after_data[:, col_idx].max())
         else:
             raise ValueError("after_data must be a DataFrame or NumPy array")
-        axes[1].set_title(f"Smoothed Data - {column}")
+        axes[1].set_title(f"Data After Hopf's Oscillator - {column}")
         axes[1].set_xlabel("Time Steps")
         axes[1].legend()
         axes[1].grid()
