@@ -87,7 +87,7 @@ def _plot_side_by_side(before_data: pd.DataFrame, after_data, csv_name: str, max
         column_image_path = os.path.join(base_dir, f"{column}.png")
 
         # Create a single figure with two subplots: before and after
-        fig, axes = plt.subplots(1, 2, figsize=(15, 6), sharey=False)
+        fig, axes = plt.subplots(1, 2, figsize=(15, 6), sharey=True)
 
         # Plot the raw input data (Before) on the left
         axes[0].plot(before_data.index, before_data[column], label=f"Before: {column}", color="blue")
