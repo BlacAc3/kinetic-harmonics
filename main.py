@@ -33,7 +33,7 @@ def main():
     # Step 3: Apply the Hopf Oscillator
     print("Applying Hopf Oscillator...")
     dt = 0.01  # Set the dt value
-    hopf = HopfOscillator(dt=dt)  # Instantiate the new HopfOscillator with dt
+    hopf = HopfOscillator(dt=dt, coupling_strength=0.1)
     smoothed_data = hopf.run(numeric_data.to_numpy())  # Use the run method
 
     # Step 4: Visualize the raw data and smoothed data
