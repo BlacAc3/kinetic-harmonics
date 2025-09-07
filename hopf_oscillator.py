@@ -20,6 +20,15 @@ class HopfOscillator:
         self.b = 0.0
 
     def compute_coupling(self, x, index, all_x):
+        # self.coupling_strength is expected to be a numpy array
+        # representing a coupling matrix.  For example:
+        # coupling_matrix = np.array([[0.0, 0.5], [0.5, 0.0]])
+        # This matrix would define the coupling between two oscillators.
+        # In this example, oscillator 0 is coupled to oscillator 1 with a
+        # strength of 0.5, and oscillator 1 is coupled to oscillator 0 with
+        # a strength of 0.5.  The diagonal elements are typically 0, as an
+        # oscillator doesn't couple to itself.
+
         if self.coupling_strength is None:
             return 0.0
         coupling = 0.0

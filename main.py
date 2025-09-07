@@ -2,6 +2,7 @@ import os
 import pandas as pd
 from utils.visualizer import plot_data
 from hopf_oscillator import HopfOscillator  # Import the new HopfOscillator
+import numpy as np
 
 def main():
     # Paths
@@ -33,7 +34,13 @@ def main():
     # Step 3: Apply the Hopf Oscillator
     print("Applying Hopf Oscillator...")
     dt = 0.01  # Set the dt value
-    hopf = HopfOscillator(dt=dt, coupling_strength=0.1)
+    coupling_matrix = np.zeros((numeric_data.shape[1], numeric_data.shape[1]))
+    for i in range(numeric_data.shape[1]):
+        for j in range(numeric_data.shape[1]):
+            if i != j:
+                coupling_matrix[i, j] = 0.5  # Or any other desired coupling strength
+
+    hopf = HopfOscillator(dt=dt, coupling_strength=coupling_matrix)
     smoothed_data = hopf.run(numeric_data.to_numpy())  # Use the run method
 
     # Step 4: Visualize the raw data and smoothed data
