@@ -81,27 +81,36 @@ class HopfOscillator:
             for i in range(n_joints):
                 x = all_x[i]
                 y = all_y[i]
-                print(f"Cost Function: Initial all_x[{i}]={x:.4f}, all_y[{i}]={y:.4f}")
+
+                if t < 10 and i < 10:
+                    print(f"Cost Function: Initial all_x[{i}]={x:.4f}, all_y[{i}]={y:.4f}")
 
                 u_norm = scaled_data[t,i] * self.data_scale
-                print(f"Cost Function: u_norm[{t},{i}]={u_norm:.4f}")
+                if t < 10 and i < 10:
+                    print(f"Cost Function: u_norm[{t},{i}]={u_norm:.4f}")
 
                 coupling = 0
                 k1_x = (mu - (x**2 + y**2)) * x - omega * y + self.k * (u_norm - x) + coupling
                 k1_y = (mu - (x**2 + y**2)) * y + omega * x
-                print(f"Cost Function: k1_x={k1_x:.4f}, k1_y={k1_y:.4f}")
+
+                if t < 10 and i < 10:
+                    print(f"Cost Function: k1_x={k1_x:.4f}, k1_y={k1_y:.4f}")
 
                 k2_x = (mu - ((x + self.dt/2*k1_x)**2 + (y + self.dt/2*k1_y)**2)) * (x + self.dt/2*k1_x) - omega * (y + self.dt/2*k1_y) + self.k * (u_norm - (x + self.dt/2*k1_x)) + coupling
                 k2_y = (mu - ((x + self.dt/2*k1_x)**2 + (y + self.dt/2*k1_y)**2)) * (y + self.dt/2*k1_y) + self.omega * (x + self.dt/2*k1_x)
-                print(f"Cost Function: k2_x={k2_x:.4f}, k2_y={k2_y:.4f}")
+
+                if t < 10 and i < 10:
+                    print(f"Cost Function: k2_x={k2_x:.4f}, k2_y={k2_y:.4f}")
 
                 k3_x = (mu - ((x + self.dt/2*k2_x)**2 + (y + self.dt/2*k2_y)**2)) * (x + self.dt/2*k2_x) - omega * (y + self.dt/2*k2_y) + self.k * (u_norm - (x + self.dt/2*k2_x)) + coupling
                 k3_y = (mu - ((x + self.dt/2*k2_x)**2 + (y + self.dt/2*k2_y)**2)) * (y + self.dt/2*k2_y) + self.omega * (x + self.dt/2*k2_x)
-                print(f"Cost Function: k3_x={k3_x:.4f}, k3_y={k3_y:.4f}")
+                if t < 10 and i < 10:
+                    print(f"Cost Function: k3_x={k3_x:.4f}, k3_y={k3_y:.4f}")
 
                 k4_x = (mu - ((x + self.dt*k3_x)**2 + (y + self.dt*k3_y)**2)) * (x + self.dt*k3_x) - omega * (y + self.dt*k3_y) + self.k * (u_norm - (x + self.dt*k3_x)) + coupling
                 k4_y = (mu - ((x + self.dt*k3_x)**2 + (y + self.dt*k3_y)**2)) * (y + self.dt*k3_y) + self.omega * (x + self.dt*k3_x)
-                print(f"Cost Function: k4_x={k4_x:.4f}, k4_y={k4_y:.4f}")
+                if t < 10 and i < 10:
+                    print(f"Cost Function: k4_x={k4_x:.4f}, k4_y={k4_y:.4f}")
 
                 x += self.dt / 6 * (k1_x + 2*k2_x + 2*k3_x + k4_x)
                 y += self.dt / 6 * (k1_y + 2*k2_y + 2*k3_y + k4_y)
@@ -111,10 +120,12 @@ class HopfOscillator:
 
                 all_x[i] = x
                 all_y[i] = y
-                print(f"Cost Function: Updated all_x[{i}]={x:.4f}, all_y[{i}]={y:.4f}")
+                if t < 10 and i < 10:
+                    print(f"Cost Function: Updated all_x[{i}]={x:.4f}, all_y[{i}]={y:.4f}")
 
                 predicted_data[t, i] = x
-                print(f"Cost Function: predicted_data[{t},{i}]={x:.4f}")
+                if t < 10 and i < 10:
+                    print(f"Cost Function: predicted_data[{t},{i}]={x:.4f}")
 
         mse = np.mean((predicted_data - actual_data)**2)
         print(f"Cost Function: MSE={mse:.4f}, mu={mu:.4f}, omega={omega:.4f}")
@@ -164,56 +175,71 @@ class HopfOscillator:
         for t in range(n_timesteps):
             if n_joints == 1:
                 coupling = 0.0
-                print(f"Run: Time step {t}: Single joint, coupling={coupling:.4f}")
-                print(f"Run: Before RK4, self.x={self.x:.4f}, self.y={self.y:.4f}")
+                if t < 10:
+                    print(f"Run: Time step {t}: Single joint, coupling={coupling:.4f}")
+                    print(f"Run: Before RK4, self.x={self.x:.4f}, self.y={self.y:.4f}")
                 self.x, self.y = self.rk4_step(self.x, self.y, u_norm[t], coupling)
-                print(f"Run: After RK4, self.x={self.x:.4f}, self.y={self.y:.4f}")
+                if t < 10:
+                    print(f"Run: After RK4, self.x={self.x:.4f}, self.y={self.y:.4f}")
                 pred = self.a * self.x + self.b
-                print(f"Run: Prediction: pred={pred:.4f}")
+                if t < 10:
+                    print(f"Run: Prediction: pred={pred:.4f}")
                 e = u_norm[t] - pred
-                print(f"Run: Error: e={e:.4f}")
+                if t < 10:
+                    print(f"Run: Error: e={e:.4f}")
                 self.a += self.eta_a * e * self.x
                 self.b += self.eta_b * e
-                print(f"Run: Updated a={self.a:.4f}, b={self.b:.4f}")
+                if t < 10:
+                    print(f"Run: Updated a={self.a:.4f}, b={self.b:.4f}")
 
                 phi_x = np.arctan2(self.y, self.x)
                 dphi = np.angle(np.exp(1j*(phi_u[t] - phi_x)))
                 self.omega += self.gamma * np.sin(dphi) * self.dt
-                print(f"Run: Phase adjustment: phi_x={phi_x:.4f}, dphi={dphi:.4f}, omega={self.omega:.4f}")
+                if t < 10:
+                    print(f"Run: Phase adjustment: phi_x={phi_x:.4f}, dphi={dphi:.4f}, omega={self.omega:.4f}")
 
                 predictions[t] = pred
                 all_x[0] = self.x
                 all_y[0] = self.y
-                print(f"Run: Updated all_x[0]={all_x[0]:.4f}, all_y[0]={all_y[0]:.4f}")
+                if t < 10:
+                    print(f"Run: Updated all_x[0]={all_x[0]:.4f}, all_y[0]={all_y[0]:.4f}")
 
             else:
                 current_x = all_x.copy()
                 current_y = all_y.copy()
-                print(f"Run: Time step {t}: Multiple joints, current_x={current_x}, current_y={current_y}")
+                if t < 10:
+                    print(f"Run: Time step {t}: Multiple joints, current_x={current_x}, current_y={current_y}")
 
                 for i in range(n_joints):
                     coupling = self.compute_coupling(current_x[i], i, current_x)
-                    print(f"Run: Joint {i}: coupling={coupling:.4f}")
+                    if t < 10 and i < 10:
+                        print(f"Run: Joint {i}: coupling={coupling:.4f}")
                     x, y = self.rk4_step(current_x[i], current_y[i], u_norm[t, i], coupling)
                     all_x[i] = x
                     all_y[i] = y
-                    print(f"Run: Joint {i}: After RK4, all_x[{i}]={all_x[i]:.4f}, all_y[{i}]={all_y[i]:.4f}")
+                    if t < 10 and i < 10:
+                        print(f"Run: Joint {i}: After RK4, all_x[{i}]={all_x[i]:.4f}, all_y[{i}]={all_y[i]:.4f}")
 
                     pred = self.a * x + self.b
-                    print(f"Run: Joint {i}: Prediction: pred={pred:.4f}")
+                    if t < 10 and i < 10:
+                        print(f"Run: Joint {i}: Prediction: pred={pred:.4f}")
                     e = u_norm[t, i] - pred
-                    print(f"Run: Joint {i}: Error: e={e:.4f}")
+                    if t < 10 and i < 10:
+                        print(f"Run: Joint {i}: Error: e={e:.4f}")
                     self.a += self.eta_a * e * x
                     self.b += self.eta_b * e
-                    print(f"Run: Joint {i}: Updated a={self.a:.4f}, b={self.b:.4f}")
+                    if t < 10 and i < 10:
+                        print(f"Run: Joint {i}: Updated a={self.a:.4f}, b={self.b:.4f}")
 
                     phi_x = np.arctan2(y, x)
                     dphi = np.angle(np.exp(1j*(phi_u[t, i] - phi_x)))
                     self.omega += self.gamma * np.sin(dphi) * self.dt
-                    print(f"Run: Joint {i}: Phase adjustment: phi_x={phi_x:.4f}, dphi={dphi:.4f}, omega={self.omega:.4f}")
+                    if t < 10 and i < 10:
+                        print(f"Run: Joint {i}: Phase adjustment: phi_x={phi_x:.4f}, dphi={dphi:.4f}, omega={self.omega:.4f}")
 
                     predictions[t, i] = pred
-                    print(f"Run: Joint {i}: predictions[{t},{i}] = {predictions[t,i]:.4f}")
+                    if t < 10 and i < 10:
+                        print(f"Run: Joint {i}: predictions[{t},{i}] = {predictions[t,i]:.4f}")
 
         predictions = predictions * (amp + 1e-9) + mean
         print(f"Run: Final predictions: predictions={predictions}")

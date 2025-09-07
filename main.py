@@ -20,9 +20,14 @@ def main():
     print("Loading data...")
     data = pd.read_csv(input_csv)
 
-    # Step 2: No data preparation needed
-    print("No data preparation needed...")
-    prepared_data = data
+    # Step 2: Data preparation - Remove the 'time' column if it exists
+    print("Preparing data...")
+    if 'Time' in data.columns:
+        prepared_data = data.drop(columns=['Time'])
+        print("Removed 'Time' column.")
+    else:
+        prepared_data = data
+        print("No 'Time' column to remove.")
 
     # Ensure only numeric columns are passed to the HopfOscillator
     # (If your CSV contains non-numeric columns like time or labels, they will be excluded)
@@ -39,6 +44,8 @@ def main():
         for j in range(numeric_data.shape[1]):
             if i != j:
                 coupling_matrix[i, j] = 0.5  # Or any other desired coupling strength
+
+
 
     hopf = HopfOscillator(dt=dt, coupling_strength=coupling_matrix)
     smoothed_data = hopf.run(numeric_data.to_numpy())  # Use the run method
