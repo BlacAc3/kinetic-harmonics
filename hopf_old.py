@@ -61,6 +61,10 @@ class HopfOscillator:
         Returns:
         - smoothed_data: A 2D numpy array of the same shape as `data`, containing the smoothed time series.
         """
+        # Store original data scale and offset
+        mean = np.mean(data)
+        amp = np.max(data) - np.min(data)
+
         # Define bounds for Bayesian Optimization
         bounds = {'mu': (0.1, 2.0), 'omega': (0.1, 2.0)}
 
@@ -92,6 +96,7 @@ class HopfOscillator:
             # Store the smoothed data
             smoothed_data[t] = x
 
+        smoothed_data = smoothed_data * (amp + 1e-9) + mean
         return smoothed_data
 
     def cost_function(self, actual_data, mu, omega):

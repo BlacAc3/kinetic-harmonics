@@ -1,14 +1,15 @@
 import os
 import pandas as pd
 from utils.visualizer import plot_data
-from hopf_oscillator import HopfOscillator  # Import the new HopfOscillator
+# from hopf_oscillator import HopfOscillator  # Import the new HopfOscillator
+from hopf_old import HopfOscillator
 import numpy as np
 
 def main():
     # Paths
     # input_csv = "optimum_data_time_series.csv"  # Update this if your CSV file is named differently
-    # input_csv ="gait_processed.csv"
-    input_csv="gait_processed2.csv"
+    input_csv ="gait_processed.csv"
+    # input_csv="optimum_data_time_series.csv"
     output_dir = "images"
     before_image_path = os.path.join(output_dir, "before.png")
     after_image_path = os.path.join(output_dir, "after.png")
@@ -47,12 +48,17 @@ def main():
 
 
 
-    hopf = HopfOscillator(dt=dt, coupling_strength=coupling_matrix)
-    smoothed_data = hopf.run(numeric_data.to_numpy())  # Use the run method
+    # hopf = HopfOscillator(dt=dt, coupling_strength=coupling_matrix)
+    # hopf = HopfOscillator(dt=dt, coupling_strength=None)
+    # smoothed_data = hopf.run(numeric_data.to_numpy())  # Use the run method
+
+    #Old Hopf code implementation
+    hopf = HopfOscillator(dt=dt)
+    smoothed_data = hopf.smooth(numeric_data.to_numpy())  # Use the run method
 
     # Step 4: Visualize the raw data and smoothed data
     print("Generating before and after visualization...")
-    plot_data(before_data=numeric_data, after_data=smoothed_data, before_path=before_image_path, after_path=after_image_path, csv_name=input_csv, side_by_side=True)
+    plot_data(before_data=numeric_data, after_data=smoothed_data, before_path=before_image_path, after_path=after_image_path, csv_name=input_csv, adaptive=True, side_by_side=True)
 
     print("Processing complete. Check the 'images' directory for results.")
 
